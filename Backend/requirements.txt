@@ -1,0 +1,64 @@
+# =============================================================================
+# AI Research Assistant — Backend Requirements
+# =============================================================================
+
+# ── FastAPI core ──────────────────────────────────────────────────────────────
+fastapi>=0.111.0
+uvicorn[standard]>=0.29.0
+python-multipart>=0.0.9
+
+# ── Config ────────────────────────────────────────────────────────────────────
+pydantic>=2.7.0
+pydantic-settings>=2.3.0
+
+# ── Database ──────────────────────────────────────────────────────────────────
+sqlalchemy>=2.0.0
+aiosqlite>=0.20.0            # SQLite async driver (default)
+# asyncpg>=0.29.0             # Uncomment for PostgreSQL
+# alembic>=1.13.0             # Uncomment for migrations
+
+# ── Auth ──────────────────────────────────────────────────────────────────────
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+
+# ── File handling ─────────────────────────────────────────────────────────────
+werkzeug>=3.0.0              # secure_filename
+aiofiles>=23.2.0
+# python-magic>=0.4.27       # Optional: MIME detection (requires libmagic)
+
+# ── LangChain + Ollama ────────────────────────────────────────────────────────
+langchain>=0.2.0
+langchain-core>=0.2.0
+langchain-community>=0.2.0
+langchain-ollama>=0.1.0
+langchain-text-splitters>=0.2.0
+langchain-experimental>=0.0.61  # SemanticChunker
+
+# ── PDF processing ────────────────────────────────────────────────────────────
+pymupdf>=1.24.0              # PyMuPDF (fitz) — preferred
+pypdf>=4.2.0                 # Fallback PDF reader
+
+# ── Vector search ─────────────────────────────────────────────────────────────
+faiss-cpu>=1.8.0             # FAISS dense retrieval
+rank-bm25>=0.2.2             # BM25 sparse retrieval
+numpy>=1.26.0
+
+# ── Reranker (optional — downloads ~550MB model on first use) ─────────────────
+# FlagEmbedding>=1.2.0       # BGE-Reranker-v2-m3
+
+# ── Caching / Queue ───────────────────────────────────────────────────────────
+redis>=5.0.0                 # Redis client
+celery[redis]>=5.4.0         # Task queue (optional)
+
+# ── Rate limiting ─────────────────────────────────────────────────────────────
+slowapi>=0.1.9
+
+# ── Web search (optional) ─────────────────────────────────────────────────────
+# tavily-python>=0.3.0       # Requires TAVILY_API_KEY
+duckduckgo-search>=6.1.0     # Free fallback
+
+# ── Logging ───────────────────────────────────────────────────────────────────
+structlog>=24.1.0
+
+# ── HTTP client ───────────────────────────────────────────────────────────────
+httpx>=0.27.0
