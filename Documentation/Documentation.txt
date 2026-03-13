@@ -1,0 +1,210 @@
+Perfect 👍 This will fit exactly into your **project documentation / internship report**.
+
+Below is **ready-to-paste documentation content** for:
+
+> **Software Modules**
+> **Data Flow Diagram (DFD)**
+> **Architecture Diagram**
+> **Database Design**
+
+All written in **simple, academic, exam-ready style**.
+
+---
+
+# 🔹 SOFTWARE MODULES
+
+The system is divided into the following main software modules. Each module performs a specific task and works together to provide a complete AI-powered research assistant.
+
+---
+
+## 1. User Authentication Module
+
+This module manages user registration, login, and session security.
+
+**Functions:**
+
+* Accepts user email and password
+* Hashes passwords before storing in database
+* Verifies credentials during login
+* Generates JWT tokens for authenticated users
+* Validates tokens for protected API requests
+
+**Purpose:**
+Ensures only authorized users can access documents and chat history.
+
+---
+
+## 2. Document Upload & Processing Module
+
+This module handles document ingestion and preparation for AI search.
+
+**Functions:**
+
+* Accepts file uploads (PDF/Text)
+* Extracts text from files
+* Splits large text into chunks
+* Converts text into vector embeddings
+* Stores vectors in FAISS vector database
+
+**Purpose:**
+Transforms user documents into searchable AI knowledge.
+
+---
+
+## 3. AI Query & Answer Generation Module (RAG Engine)
+
+This module uses Retrieval-Augmented Generation (RAG) to answer user queries.
+
+**Functions:**
+
+* Converts user question into embedding
+* Searches relevant document chunks from vector DB
+* Sends context to LLM (Phi-3 / Ollama)
+* Generates human-like answers
+
+**Purpose:**
+Provides accurate and context-based responses from uploaded documents.
+
+---
+
+## 4. Chat History Management Module
+
+This module stores and retrieves past interactions.
+
+**Functions:**
+
+* Saves each question and answer
+* Links chats to user accounts
+* Fetches previous conversation history
+
+**Purpose:**
+Allows users to view and track their research progress.
+
+---
+
+## 5. Frontend Interface Module (React)
+
+This module provides the user interface.
+
+**Functions:**
+
+* Signup & Login forms
+* File upload screen
+* Question input box
+* Answer display
+* Chat history view
+* Loading animations
+
+**Purpose:**
+Enables easy interaction with the AI system.
+
+---
+
+# 🔹 DATA FLOW DIAGRAM (DFD)
+
+### Level-0 DFD (System Overview)
+
+```
+User → React UI → FastAPI Server → AI Engine → Response → User
+```
+
+### Level-1 DFD
+
+```
+User
+  ↓
+[Login / Signup]
+  ↓
+[JWT Token]
+
+User → Upload File
+  ↓
+[Text Extraction]
+  ↓
+[Embedding Generator]
+  ↓
+[FAISS Vector DB]
+
+User → Ask Question
+  ↓
+[Question Embedding]
+  ↓
+[Vector Search]
+  ↓
+[LLM Answer Generator]
+  ↓
+[Chat Storage]
+  ↓
+User Receives Answer
+```
+
+---
+
+# 🔹 ARCHITECTURE DIAGRAM (Text Representation)
+
+```
+        ┌─────────────┐
+        │   User      │
+        └─────┬───────┘
+              ↓
+      ┌─────────────┐
+      │ React Front │
+      └─────┬───────┘
+              ↓
+      ┌─────────────┐
+      │ FastAPI API │
+      └─────┬───────┘
+        ┌────┴────┐
+        ↓         ↓
+  ┌─────────┐  ┌──────────┐
+  │ SQLite  │  │ FAISS DB │
+  └────┬────┘  └────┬─────┘
+        ↓            ↓
+        └──────┬─────┘
+               ↓
+        ┌─────────────┐
+        │  LLM (Phi-3)│
+        └─────────────┘
+```
+
+---
+
+# 🔹 DATABASE DESIGN
+
+### 1. Users Table
+
+| Field Name | Type         | Description     |
+| ---------- | ------------ | --------------- |
+| id         | Integer (PK) | Unique user ID  |
+| email      | String       | User email      |
+| password   | String       | Hashed password |
+
+---
+
+### 2. Documents Table
+
+| Field Name | Type         | Description        |
+| ---------- | ------------ | ------------------ |
+| id         | Integer (PK) | Document ID        |
+| filename   | String       | Uploaded file name |
+| user_id    | Integer (FK) | Linked user        |
+
+---
+
+### 3. Chat History Table
+
+| Field Name | Type         | Description         |
+| ---------- | ------------ | ------------------- |
+| id         | Integer (PK) | Chat ID             |
+| question   | Text         | User question       |
+| answer     | Text         | AI answer           |
+| time       | DateTime     | Time of interaction |
+| user_id    | Integer (FK) | Linked user         |
+
+---
+
+If you want, next I can:
+
+* Draw **DFD image**
+* Draw **Architecture diagram image**
+* Convert this into **PDF / Word format**

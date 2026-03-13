@@ -1,0 +1,23 @@
+# Node/React
+node_modules/
+build/
+dist/
+public/
+package-lock.json
+package.json
+README.md
+
+# Python
+__pycache__/
+venv/
+env/
+uploads/
+vector_store/
+*.pyc
+rag.db
+
+# Environment variables (Never push your secrets!)
+.env
+
+# Databases
+*.sqlite3
