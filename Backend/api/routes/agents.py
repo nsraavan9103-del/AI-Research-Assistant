@@ -76,6 +76,7 @@ async def research(
     )
     db.add(assistant_msg)
     await db.flush()
+    await db.commit()
 
     return {
         "answer": result["answer"],

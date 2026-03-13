@@ -93,7 +93,7 @@ export function useStreamQuery() {
         }
 
         setState((s) => ({ ...s, isStreaming: false, stage: '' }))
-        return conversationIdOut
+        return { conversationId: conversationIdOut, fullText: state.currentText }
       } catch (err) {
         if (err.name === 'AbortError') {
           setState((s) => ({ ...s, isStreaming: false }))
@@ -101,7 +101,7 @@ export function useStreamQuery() {
         }
         const msg = err instanceof Error ? err.message : 'Stream failed'
         setState((s) => ({ ...s, isStreaming: false, error: msg }))
-        return null
+        return { conversationId: null, fullText: '' }
       }
     },
     [accessToken]

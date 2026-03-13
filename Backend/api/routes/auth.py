@@ -248,3 +248,14 @@ async def reset_password(req: ResetPasswordRequest, db: AsyncSession = Depends(g
     )
 
     return {"message": "Password reset successful. Please log in again."}
+
+
+@router.get("/me")
+async def me(current_user: User = Depends(get_current_user)):
+    """Return the authenticated user's profile."""
+    return {
+        "id": current_user.id,
+        "email": current_user.email,
+        "full_name": current_user.full_name,
+        "role": current_user.role,
+    }

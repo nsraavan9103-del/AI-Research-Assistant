@@ -37,6 +37,10 @@ def extract_text(storage_path: str) -> tuple[str, list[dict]]:
 
     if ext == ".pdf":
         return _extract_pdf(storage_path)
+    elif ext == ".docx":
+        return _extract_docx(storage_path)
+    elif ext in (".xlsx", ".xls"):
+        return _extract_xlsx(storage_path)
     else:
         return _extract_text(storage_path)
 
@@ -73,6 +77,54 @@ def _extract_text(path: str) -> tuple[str, list[dict]]:
     with open(path, "r", encoding="utf-8", errors="ignore") as f:
         text = f.read()
     return text, [{"page_num": 1}]
+
+
+def _extract_docx(path: str) -> tuple[str, list[dict]]:
+    """Extract text from a Word document (.docx)."""
+    try:
+        import docx2txt
+        text = docx2txt.process(path)
+        return text or "", [{"page_num": 1}]
+    except ImportError:
+        pass
+    try:
+        from docx import Document
+        doc = Document(path)
+        paragraphs = [p.text for p in doc.paragraphs if p.text.strip()]
+        text = "\n\n".join(paragraphs)
+        return text, [{"page_num": 1}]
+    except Exception as e:
+        raise RuntimeError(f"Could not read .docx file: {e}")
+
+
+def _extract_xlsx(path: str) -> tuple[str, list[dict]]:
+    """Extract text from an Excel file (.xlsx / .xls). Each sheet becomes a 'page'."""
+    try:
+        import openpyxl
+        wb = openpyxl.load_workbook(path, read_only=True, data_only=True)
+        pages = []
+        page_offsets = []
+        full_text = ""
+        for sheet_num, sheet_name in enumerate(wb.sheetnames, start=1):
+            ws = wb[sheet_name]
+            rows = []
+            for row in ws.iter_rows(values_only=True):
+                cells = [str(c) if c is not None else "" for c in row]
+                if any(c.strip() for c in cells):
+                    rows.append("\t".join(cells))
+            sheet_text = f"[Sheet: {sheet_name}]\n" + "\n".join(rows)
+            start = len(full_text)
+            full_text += sheet_text + "\n\n"
+            page_offsets.append({
+                "page_num": sheet_num,
+                "char_start": start,
+                "char_end": len(full_text),
+                "section": sheet_name,
+            })
+        wb.close()
+        return full_text, page_offsets or [{"page_num": 1}]
+    except Exception as e:
+        raise RuntimeError(f"Could not read .xlsx file: {e}")
 
 
 # ── Chunker ───────────────────────────────────────────────────────────────────

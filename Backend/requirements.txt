@@ -1,64 +1,36 @@
-# =============================================================================
-# AI Research Assistant — Backend Requirements
-# =============================================================================
+# ============================================================
+# AI Research Assistant — requirements.txt
+# Fixed: single clean install, pinned versions, Windows 10 compatible
+# ============================================================
 
-# ── FastAPI core ──────────────────────────────────────────────────────────────
-fastapi>=0.111.0
-uvicorn[standard]>=0.29.0
-python-multipart>=0.0.9
+# Web framework
+fastapi==0.111.0
+uvicorn[standard]==0.30.1
+python-multipart==0.0.9
 
-# ── Config ────────────────────────────────────────────────────────────────────
-pydantic>=2.7.0
-pydantic-settings>=2.3.0
+# Database & Auth
+sqlalchemy==2.0.30
+passlib[bcrypt]==1.7.4
+python-jose[cryptography]==3.3.0
+python-dotenv==1.0.1
 
-# ── Database ──────────────────────────────────────────────────────────────────
-sqlalchemy>=2.0.0
-aiosqlite>=0.20.0            # SQLite async driver (default)
-# asyncpg>=0.29.0             # Uncomment for PostgreSQL
-# alembic>=1.13.0             # Uncomment for migrations
+# LangChain — pinned to avoid conflicts (FIX: was contradictory installs)
+langchain==0.2.16
+langchain-community==0.2.16
+langchain-core==0.2.38
+langchain-text-splitters==0.2.4
+langchain-ollama==0.1.3
 
-# ── Auth ──────────────────────────────────────────────────────────────────────
-python-jose[cryptography]>=3.3.0
-passlib[bcrypt]>=1.7.4
+# Vector store (CPU-only — compatible with 8GB RAM + no GPU requirement)
+faiss-cpu==1.8.0
 
-# ── File handling ─────────────────────────────────────────────────────────────
-werkzeug>=3.0.0              # secure_filename
-aiofiles>=23.2.0
-# python-magic>=0.4.27       # Optional: MIME detection (requires libmagic)
+# PDF processing
+pypdf==4.3.1
 
-# ── LangChain + Ollama ────────────────────────────────────────────────────────
-langchain>=0.2.0
-langchain-core>=0.2.0
-langchain-community>=0.2.0
-langchain-ollama>=0.1.0
-langchain-text-splitters>=0.2.0
-langchain-experimental>=0.0.61  # SemanticChunker
+# Document processing (DOCX, XLSX, TXT)
+python-docx>=1.1.0
+openpyxl>=3.1.0
+docx2txt>=0.8
 
-# ── PDF processing ────────────────────────────────────────────────────────────
-pymupdf>=1.24.0              # PyMuPDF (fitz) — preferred
-pypdf>=4.2.0                 # Fallback PDF reader
-
-# ── Vector search ─────────────────────────────────────────────────────────────
-faiss-cpu>=1.8.0             # FAISS dense retrieval
-rank-bm25>=0.2.2             # BM25 sparse retrieval
-numpy>=1.26.0
-
-# ── Reranker (optional — downloads ~550MB model on first use) ─────────────────
-# FlagEmbedding>=1.2.0       # BGE-Reranker-v2-m3
-
-# ── Caching / Queue ───────────────────────────────────────────────────────────
-redis>=5.0.0                 # Redis client
-celery[redis]>=5.4.0         # Task queue (optional)
-
-# ── Rate limiting ─────────────────────────────────────────────────────────────
-slowapi>=0.1.9
-
-# ── Web search (optional) ─────────────────────────────────────────────────────
-# tavily-python>=0.3.0       # Requires TAVILY_API_KEY
-duckduckgo-search>=6.1.0     # Free fallback
-
-# ── Logging ───────────────────────────────────────────────────────────────────
-structlog>=24.1.0
-
-# ── HTTP client ───────────────────────────────────────────────────────────────
-httpx>=0.27.0
+# HTTP client (for Ollama health check)
+httpx==0.27.0

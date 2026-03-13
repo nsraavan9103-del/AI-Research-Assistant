@@ -1,23 +1,22 @@
-# Node/React
-node_modules/
-build/
-dist/
-public/
-package-lock.json
-package.json
-README.md
-
 # Python
 __pycache__/
-venv/
-env/
-uploads/
-vector_store/
 *.pyc
-rag.db
-
-# Environment variables (Never push your secrets!)
+*.pyo
+venv/
 .env
+*.db
 
-# Databases
-*.sqlite3
+# Uploads (never commit user data)
+Backend/uploads/
+
+# Node
+node_modules/
+frontend/build/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

@@ -25,6 +25,7 @@ class QueryRequest(BaseModel):
     document_ids: list[str] = []
     conversation_id: Optional[str] = None
     use_web_search: bool = False
+    model: Optional[str] = None  # e.g. "qwen2.5:3b", "phi3:mini"
 
 
 class QueryResponse(BaseModel):
@@ -87,6 +88,7 @@ async def query(
         document_ids=req.document_ids,
         user_id=current_user.id,
         use_web_search=req.use_web_search,
+        model=req.model,
     )
 
     latency = (time.monotonic() - start) * 1000
@@ -138,8 +140,11 @@ async def query_stream(
                 document_ids=req.document_ids,
                 user_id=current_user.id,
                 use_web_search=req.use_web_search,
+                model=req.model,
             ):
-                if chunk.get("type") == "token":
+                if chunk.get("type") == "stage":
+                    yield f"data: {json.dumps({'stage': chunk['content']})}\n\n"
+                elif chunk.get("type") == "token":
                     full_answer.append(chunk["content"])
                     yield f"data: {json.dumps({'token': chunk['content']})}\n\n"
                 elif chunk.get("type") == "citations":

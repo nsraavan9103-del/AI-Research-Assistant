@@ -13,7 +13,11 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 os.makedirs(VECTOR_DIR, exist_ok=True)
 
 embeddings = OllamaEmbeddings(model="nomic-embed-text")
-llm = OllamaLLM(model="phi3")
+llm = OllamaLLM(
+    model="phi3:mini",      # Use the correct lightweight tag
+    num_ctx=2048,           # Strictly limit to 2048 tokens to prevent OOM
+    keep_alive="0m"         # Immediately offload from RAM after generation
+)
 
 def load_docs(path):
     if path.endswith(".pdf"):

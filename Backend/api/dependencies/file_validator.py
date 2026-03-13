@@ -18,10 +18,15 @@ ALLOWED_MIMES = {
     "application/pdf",
     "text/plain",
     "text/markdown",
-    "application/octet-stream",  # some text files on Windows
+    "application/octet-stream",          # many binaries on Windows
+    # Office Open XML (docx / xlsx)
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "application/msword",                # legacy .doc
+    "application/vnd.ms-excel",          # legacy .xls
 }
 
-ALLOWED_EXTENSIONS = {".pdf", ".txt", ".md"}
+ALLOWED_EXTENSIONS = {".pdf", ".txt", ".md", ".docx", ".xlsx", ".xls"}
 
 
 def _get_mime(content: bytes) -> str:
@@ -30,9 +35,15 @@ def _get_mime(content: bytes) -> str:
         import magic as _magic  # type: ignore
         return _magic.from_buffer(content[:2048], mime=True)
     except ImportError:
-        # python-magic not available (optional) — check PDF magic bytes manually
+        # PDF magic bytes
         if content[:4] == b"%PDF":
             return "application/pdf"
+        # Office Open XML files (docx, xlsx) are ZIP archives starting with PK\x03\x04
+        if content[:4] == b"PK\x03\x04":
+            return "application/octet-stream"  # already in ALLOWED_MIMES
+        # OLE2 compound files (legacy .doc, .xls) start with D0 CF 11 E0
+        if content[:4] == b"\xd0\xcf\x11\xe0":
+            return "application/octet-stream"
         # Try decoding as UTF-8 text
         try:
             content[:512].decode("utf-8")

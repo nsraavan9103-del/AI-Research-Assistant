@@ -41,7 +41,11 @@ export default function AuthPage() {
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         })
         setTokens(data.access_token, data.refresh_token)
-        setUser({ id: '', email, full_name: '', role: 'user' })
+        // Fetch the real user profile instead of using a hardcoded stub
+        const { data: userData } = await axios.get('/api/auth/me', {
+          headers: { Authorization: `Bearer ${data.access_token}` },
+        })
+        setUser(userData)
         navigate('/chat')
       }
     } catch (err) {

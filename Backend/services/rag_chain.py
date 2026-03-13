@@ -54,14 +54,24 @@ def extract_citations(response: str) -> list[dict]:
     ]
 
 
-def _get_llm(streaming: bool = False):
-    """Get Ollama LLM instance."""
+def _get_llm(streaming: bool = False, model: Optional[str] = None):
+    """Get Ollama LLM instance. Uses supplied model or settings default with fallback."""
     from langchain_ollama import OllamaLLM
-    return OllamaLLM(
-        model=settings.LLM_MODEL,
-        base_url=settings.OLLAMA_BASE_URL,
-        streaming=streaming,
-    )
+    chosen = model or settings.LLM_MODEL
+    try:
+        llm = OllamaLLM(
+            model=chosen,
+            base_url=settings.OLLAMA_BASE_URL,
+            streaming=streaming,
+        )
+        return llm
+    except Exception:
+        # Fall back to the configured backup model
+        return OllamaLLM(
+            model=settings.LLM_MODEL_FALLBACK,
+            base_url=settings.OLLAMA_BASE_URL,
+            streaming=streaming,
+        )
 
 
 # ── Standard (blocking) pipeline ──────────────────────────────────────────────
@@ -70,6 +80,7 @@ async def run_rag_pipeline(
     document_ids: Optional[list[str]] = None,
     user_id: Optional[str] = None,
     use_web_search: bool = False,
+    model: Optional[str] = None,
 ) -> dict:
     """
     Full RAG pipeline (non-streaming).
@@ -112,17 +123,17 @@ async def run_rag_pipeline(
 
     context = build_context_block(reranked)
     prompt_text = (
-        CITATION_SYSTEM_PROMPT.format(context=context)
+        CITATION_SYSTEM_PROMPT.replace("{context}", context)
         + f"\n\nQuestion: {question}\n\nAnswer:"
     )
 
     # 5. LLM
     try:
-        llm = _get_llm(streaming=False)
+        llm = _get_llm(streaming=False, model=model)
         loop = asyncio.get_event_loop()
         answer = await loop.run_in_executor(None, llm.invoke, prompt_text)
     except Exception as e:
-        answer = f"LLM error: {str(e)}. Please ensure Ollama is running with the `{settings.LLM_MODEL}` model."
+        answer = f"LLM error: {str(e)}. Please ensure Ollama is running with the `{model or settings.LLM_MODEL}` model."
 
     citations = extract_citations(str(answer))
     return {"answer": str(answer), "citations": citations, "cached": False}
@@ -134,6 +145,7 @@ async def run_rag_pipeline_stream(
     document_ids: Optional[list[str]] = None,
     user_id: Optional[str] = None,
     use_web_search: bool = False,
+    model: Optional[str] = None,
 ) -> AsyncIterator[dict]:
     """
     Streaming RAG pipeline — yields:
@@ -168,7 +180,7 @@ async def run_rag_pipeline_stream(
 
     if context:
         prompt_text = (
-            CITATION_SYSTEM_PROMPT.format(context=context)
+            CITATION_SYSTEM_PROMPT.replace("{context}", context)
             + f"\n\nQuestion: {question}\n\nAnswer:"
         )
     else:
@@ -177,7 +189,7 @@ async def run_rag_pipeline_stream(
     yield {"type": "stage", "content": "Synthesizing answer..."}
 
     try:
-        llm = _get_llm(streaming=True)
+        llm = _get_llm(streaming=True, model=model)
         full_response = []
 
         # Stream from Ollama

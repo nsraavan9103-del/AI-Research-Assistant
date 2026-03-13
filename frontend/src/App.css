@@ -1,0 +1,359 @@
+/* ============================================================
+   AI Research Assistant — App.css
+   Clean, dark-friendly UI, no external UI library needed
+   ============================================================ */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #0f1117;
+  color: #e2e8f0;
+  min-height: 100vh;
+}
+
+/* ── Auth Screen ─────────────────────────────────────────── */
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0f1117 0%, #1a1f2e 100%);
+}
+
+.auth-card {
+  background: #1e2433;
+  border: 1px solid #2d3748;
+  border-radius: 16px;
+  padding: 40px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+
+.app-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #63b3ed;
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.app-subtitle {
+  color: #718096;
+  text-align: center;
+  font-size: 13px;
+  margin-bottom: 28px;
+}
+
+.tab-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.tab {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #2d3748;
+  border-radius: 8px;
+  background: transparent;
+  color: #a0aec0;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.tab.active {
+  background: #3182ce;
+  color: white;
+  border-color: #3182ce;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.input {
+  width: 100%;
+  padding: 12px 14px;
+  background: #2d3748;
+  border: 1px solid #4a5568;
+  border-radius: 8px;
+  color: #e2e8f0;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input:focus { border-color: #63b3ed; }
+
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+  background: #3182ce;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 4px;
+}
+
+.btn-primary:hover:not(:disabled) { background: #2c6fad; }
+.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ── App Layout ──────────────────────────────────────────── */
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  background: #1a1f2e;
+  border-bottom: 1px solid #2d3748;
+}
+
+.header-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #63b3ed;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 13px;
+}
+
+.ollama-warning { color: #f6ad55; font-weight: 600; }
+.ollama-ok { color: #68d391; }
+.user-name { color: #a0aec0; }
+
+/* ── Model Switcher ──────────────────────────────────────── */
+.model-switcher {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.model-label {
+  color: #a0aec0;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.model-select {
+  background: #2d3748;
+  border: 1px solid #4a5568;
+  color: #e2e8f0;
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 13px;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s;
+  max-width: 160px;
+}
+
+.model-select:hover,
+.model-select:focus {
+  border-color: #63b3ed;
+}
+
+.model-select option {
+  background: #1e2433;
+  color: #e2e8f0;
+}
+
+.btn-logout {
+  padding: 6px 14px;
+  background: transparent;
+  border: 1px solid #e53e3e;
+  color: #e53e3e;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+.btn-logout:hover { background: #e53e3e; color: white; }
+
+.app-main {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ── Left Panel ──────────────────────────────────────────── */
+.left-panel {
+  width: 300px;
+  min-width: 260px;
+  background: #1e2433;
+  border-right: 1px solid #2d3748;
+  padding: 24px 20px;
+  overflow-y: auto;
+}
+
+.upload-panel h3 {
+  font-size: 15px;
+  color: #e2e8f0;
+  margin-bottom: 16px;
+}
+
+.upload-btn {
+  display: inline-block;
+  padding: 10px 18px;
+  background: #276749;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.upload-btn:hover:not(.disabled) { background: #2f855a; }
+.upload-btn.disabled { opacity: 0.6; cursor: not-allowed; }
+
+.status-msg {
+  margin-top: 12px;
+  font-size: 13px;
+  color: #68d391;
+  line-height: 1.5;
+}
+
+.error-msg {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #fc8181;
+}
+
+/* ── Right Panel ─────────────────────────────────────────── */
+.right-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.empty-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #4a5568;
+  gap: 10px;
+  font-size: 16px;
+}
+
+/* ── Chat Panel ──────────────────────────────────────────── */
+.chat-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.chat-header {
+  padding: 14px 20px;
+  background: #1a1f2e;
+  border-bottom: 1px solid #2d3748;
+  font-size: 14px;
+  color: #a0aec0;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.message {
+  max-width: 80%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  line-height: 1.6;
+}
+
+.message.user {
+  align-self: flex-end;
+  background: #3182ce;
+  color: white;
+}
+
+.message.assistant {
+  align-self: flex-start;
+  background: #2d3748;
+  color: #e2e8f0;
+}
+
+.role-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  opacity: 0.7;
+}
+
+.typing {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+.chat-input-row {
+  display: flex;
+  gap: 10px;
+  padding: 16px 20px;
+  background: #1a1f2e;
+  border-top: 1px solid #2d3748;
+}
+
+.chat-input {
+  flex: 1;
+  padding: 10px 14px;
+  background: #2d3748;
+  border: 1px solid #4a5568;
+  border-radius: 8px;
+  color: #e2e8f0;
+  font-size: 14px;
+  resize: none;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.chat-input:focus { border-color: #63b3ed; }
+
+.btn-send {
+  padding: 10px 20px;
+  background: #3182ce;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  align-self: flex-end;
+  transition: background 0.2s;
+}
+
+.btn-send:hover:not(:disabled) { background: #2c6fad; }
+.btn-send:disabled { opacity: 0.5; cursor: not-allowed; }

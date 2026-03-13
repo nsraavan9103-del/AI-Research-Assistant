@@ -45,7 +45,8 @@ class Settings(BaseSettings):
 
     # ── LLM / Embeddings ──────────────────────────────────────────────────────
     OLLAMA_BASE_URL: str = "http://localhost:11434"
-    LLM_MODEL: str = "phi3"
+    LLM_MODEL: str = "qwen2.5:3b"          # Primary model
+    LLM_MODEL_FALLBACK: str = "phi3:mini"  # Backup model
     EMBED_MODEL: str = "nomic-embed-text"
     LLM_CACHE_TTL: int = 3600         # seconds
     LLM_CACHE_SIMILARITY: float = 0.95

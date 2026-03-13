@@ -88,19 +88,21 @@ export default function ChatPage() {
         })
       }
     } else {
-      const convId = await streamQuery(
+      const result = await streamQuery(
         q,
         selectedDocIds,
         currentConversationId || undefined,
         useWebSearch
       )
+      const convId = result?.conversationId
+      const fullText = result?.fullText
       if (convId && !currentConversationId) setCurrentConversationId(convId)
 
-      if (streamState.currentText || !streamState.error) {
+      if (fullText || !streamState.error) {
         addMessage({
           id: Date.now().toString(),
           role: 'assistant',
-          content: streamState.currentText || '(No response)',
+          content: fullText || '(No response)',
           citations: streamState.citations,
         })
       }
